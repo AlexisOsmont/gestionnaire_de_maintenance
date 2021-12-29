@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,5 +19,12 @@
 			</span>
 		</form>
 	</div>
+	<p>
+		<c:forEach var="demande" items="$ { demandes }">
+			<c:out value="${ demande }" />
+		</c:forEach>
+		
+		<c:out value="test"/>
+	</p>
 </body>
 </html>

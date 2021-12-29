@@ -129,7 +129,7 @@ public class DAOFactory {
 	 * @return {@link com.test.dao.RessourceDAO}
 	 */
 	public RessourceDAO getRessourceDao() {
-		return new RessourceDAO(this);
+		return null;
 	}
 	
 	/**

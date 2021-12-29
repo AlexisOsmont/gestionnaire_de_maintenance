@@ -1,6 +1,8 @@
 package dao;
 
+import java.beans.Statement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +39,7 @@ public class RessourceDAO {
 	// Requ�te qui met � jour les informations d'un utilisateur dans la table User
 	private static final String SQL_UPDATE_BY_ID				= String.format("UPDATE %s SET localisation=?, description=? WHERE idSource=?", DAOFactory.TABLE_RESSOURCE);
 	
-	private DAOFactory factory;
+	private DAOFactory factory;	
 	
 	// COMMANDES
 
@@ -46,9 +48,9 @@ public class RessourceDAO {
 	 * Contructeur de l'objet, prend en param�tre un DAOFactory uniquement si DAOFactory.dbIsValidate()
 	 * @param factory
 	 */
-	RessourceDAO(DAOFactory factory) {
+	/*private RessourceDAO(DAOFactory factory) {
 		this.factory = factory;
-	}
+	}*/
 	
 	// REQUETES
 	
@@ -60,10 +62,10 @@ public class RessourceDAO {
 	 */
 	public Ressource getRessource(Long id) throws DAOException {
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+		//PreparedStatement preparedStatement = null;
+		//ResultSet resultSet = null;
 		Ressource ressource = null;
-		
+		/*
 		try {
 			connection = factory.getConnection();
 			preparedStatement = DAOFactory.initializePreparedRequest(
@@ -82,8 +84,37 @@ public class RessourceDAO {
 			throw new DAOException(e);
 		} finally {
 			DAOFactory.close(resultSet, preparedStatement, connection);
-		}
+		}*/
 		return ressource;
+	}
+	
+	public Ressource getLocationRessource(long id) {
+		try {
+			String query = "select * from Ressources where idSource="+id;
+			Ressource ressource = new Ressource();
+			ressource.setUserId(id);
+			System.out.println(ressource.getUserId());
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			System.out.println("ici\n");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			System.out.println("la");
+			java.sql.Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			System.out.println("ou alors ");
+			rs.next();
+			System.out.println("merde");
+
+			String location = rs.getString(3);
+			System.out.println(location);
+			ressource.setLocalisation(location);
+			return ressource;
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("ca va etre null");
+		return null;
+		
 	}
 	
 	/**
