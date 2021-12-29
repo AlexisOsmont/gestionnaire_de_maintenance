@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://JAVA.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+	version="3.0">
+  
+  <!-- Description de la servlet test-->
+  <servlet>
+    <servlet-name>Test</servlet-name>
+    <servlet-class>com.test.servlets.Test</servlet-class>
+  </servlet>
+  
+  <!-- Liaison de la servlet Test avec l'URL /bonjour-->
+  <servlet-mapping>
+    <servlet-name>Test</servlet-name>
+    <url-pattern>/bonjour</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Description de la servlet accueil-->
+  <servlet>
+    <servlet-name>Accueil</servlet-name>
+    <servlet-class>com.test.servlets.Accueil</servlet-class>
+  </servlet>
+  
+  <!-- Liaison de la servlet Test avec l'URL /accueil-->
+  <servlet-mapping>
+    <servlet-name>Accueil</servlet-name>
+    <url-pattern>/accueil</url-pattern>
+  </servlet-mapping>
+</web-app> 
