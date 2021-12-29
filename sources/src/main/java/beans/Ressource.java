@@ -1,9 +1,10 @@
-package domain;
+package beans;
+
 
 /**
  * Objet bean permettant de manipuler/r�cup�rer les informations d'un utilisateur.
  */
-public class Resource {
+public class Ressource {
 
 	// ATTRIBUTS
 	
@@ -14,7 +15,7 @@ public class Resource {
 	
 	// CONSTRUCTEURS
 	
-	public Resource() {
+	public Ressource() {
 		// rien
 	}
 	
@@ -31,13 +32,13 @@ public class Resource {
 	 * L'identifiant de l'utilisateur receptionneur.
 	 */
 	public Long getUserId() {
-		return this.id;
+		return this.userId;
 	}
 
 	/**
 	 * La localisation de la demande.
 	 */
-	public String geLocalisation() {
+	public String getLocalisation() {
 		return this.localisation;
 	}
 
@@ -77,7 +78,7 @@ public class Resource {
 	/**
 	*  Fixe la description de la requete.
 	*/
-	public String getDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 }
