@@ -12,6 +12,7 @@ public class Ressource {
 	private Long userId;
 	private String localisation;
 	private String description;
+	private String nom;
 	
 	// CONSTRUCTEURS
 	
@@ -49,6 +50,13 @@ public class Ressource {
 		return this.description;
 	}
 	
+	/**
+     * La description de la demande.
+	 */
+	public String getNom() {
+		return this.nom;
+	}
+	
 	// COMMANDES
 	
 	/**
@@ -57,6 +65,10 @@ public class Ressource {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 	
 	/**

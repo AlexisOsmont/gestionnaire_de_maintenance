@@ -45,17 +45,18 @@ public class CreationRessource extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//if (!DAOFactory.dbIsValidate()) {
-	     //   response.sendRedirect(request.getContextPath() + "/configuration");
-		//} else {
 			System.out.println("je suis dans le servlets");
+			String name = request.getParameter("name");
+			String localisation = request.getParameter("localisation");
+			String description = request.getParameter("description");
+
 			this.ressourceDao = new RessourceDAO();
-			Ressource ressource = ressourceDao.getLocationRessource(1);
-			System.out.println(ressource.getLocalisation());
-	        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
-		//}
-		 
-			
-			
+			Ressource ressource = new Ressource();
+			ressource.setDescription(description);
+			ressource.setNom(name);
+			ressource.setLocalisation(localisation);
+			ressource.setUserId((long) 1);
+			ressourceDao.createRessource(ressource);
+	        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);	
 	}
 }

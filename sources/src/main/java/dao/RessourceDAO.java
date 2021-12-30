@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.cj.xdevapi.PreparableStatement;
+
 import beans.Ressource;
 
 /**
@@ -34,7 +36,7 @@ public class RessourceDAO {
 	private static final String SQL_SELECT_BY_RESPON			= String.format("SELECT idSource, description, localisation FROM %s WHERE iDuser=?;", DAOFactory.TABLE_RESSOURCE);
 	
 	// Requ�te qui insert une ligne dans la table User
-	private static final String SQL_INSERT 						= String.format("INSERT INTO %s VALUES (?, ?, ?, ?);", DAOFactory.TABLE_RESSOURCE);
+	private static final String SQL_INSERT 						= String.format("INSERT INTO Ressources VALUES (?, ?, ?, ?, ?);", DAOFactory.TABLE_RESSOURCE);
 	
 	// Requ�te qui met � jour les informations d'un utilisateur dans la table User
 	private static final String SQL_UPDATE_BY_ID				= String.format("UPDATE %s SET localisation=?, description=? WHERE idSource=?", DAOFactory.TABLE_RESSOURCE);
@@ -152,34 +154,25 @@ public class RessourceDAO {
 	// COMMANDES
 
 	/**
-	 * Commande permettant de rajouter l'utilisateur dans la base de donn�es
+	 * Commande permettant de rajouter une ressource dans la base de donn�es
 	 * @param User user
 	 * @throws DAOException
 	 */
 	public void createRessource(Ressource ressource) throws DAOException {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		
 		try {
-			Long maxId = getNextId() + 1;
-			connection = factory.getConnection();
-			preparedStatement = DAOFactory.initializePreparedRequest(
-					connection, 
-					SQL_INSERT,
-					false,
-					maxId, ressource.getLocalisation() , ressource.getUserId(), ressource.getDescription());
-			
-			int status = preparedStatement.executeUpdate();
-			if (status == 0) {
-				throw new DAOException("Creating user failed !");
-			}
-			ressource.setId(maxId);
-		} catch (SQLException e) {
-			//throw new DAOException(e);
-		} finally {
-			DAOFactory.close(preparedStatement, connection);
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			PreparedStatement pst = con.prepareStatement(SQL_INSERT);
+			pst.setLong(1,0);
+			pst.setLong(2,ressource.getUserId());
+			pst.setString(3,ressource.getLocalisation());
+			pst.setString(4,ressource.getDescription());
+			pst.setString(5,ressource.getNom());
+			pst.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
 	}
 
 	/**

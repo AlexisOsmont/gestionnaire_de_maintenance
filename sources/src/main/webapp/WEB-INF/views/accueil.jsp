@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ page import="dao.DemandeDAO" %>
+<%@ page import ="java.util.List"%>
+<%@ page import="beans.Demande" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +23,19 @@
 			</span>
 		</form>
 	</div>
+	<%
+	List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
+	%>
+	<ul>
+	<%
+	for (Demande demande : listDemandes) {
+	%>
+		<li> <%= demande.getDescription() %></li>
+	<%
+	} 
+	%>
+	</ul>
+	<!-- 
 	<p>
 		<c:forEach var="demande" items="$ { demandes }">
 			<c:out value="${ demande }" />
@@ -26,5 +43,6 @@
 		
 		<c:out value="test"/>
 	</p>
+	-->
 </body>
 </html>

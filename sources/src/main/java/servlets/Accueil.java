@@ -32,9 +32,9 @@ public class Accueil extends HttpServlet {
 		Demande demande = new Demande();
 		
 		demande.setIdRequest(45);
-		demande.setIdUser(3);
-		demande.setIdSource(38);
-		demande.setIdManagerMaint(11);
+		demande.setIdUser(8);
+		demande.setIdSource(3);
+		demande.setIdManagerMaint(1);
 		demande.setState("Test ajout d'une requête");
 		demande.setDescription(request.getParameter("anomalie"));
 		

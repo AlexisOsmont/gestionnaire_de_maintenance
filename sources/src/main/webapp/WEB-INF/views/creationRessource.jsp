@@ -34,13 +34,13 @@
 					<input type="text" id="localisation" placeholder="Localisation" name="localisation" required>
 				</div>
 				<div>
-					<input type="submit" id="submit-form" value="Valider">
+					<input type="submit" id="submit-form" value="Créer">
 				</div>
 			</form>
 			<%
 					if (request.getAttribute("infoCreation") != null) {
 						if(request.getAttribute("infoCreation").toString().startsWith("Creation")) { %>
-							<p style="color:red">Erreur pendant la création du kanban.</p>
+							<p style="color:red">Erreur pendant la création de la ressource.</p>
 				<% 	
 						}
 					}
