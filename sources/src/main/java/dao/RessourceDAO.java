@@ -95,28 +95,18 @@ public class RessourceDAO {
 			String query = "select * from Ressources where idSource="+id;
 			Ressource ressource = new Ressource();
 			ressource.setUserId(id);
-			System.out.println(ressource.getUserId());
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			System.out.println("ici\n");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
-			System.out.println("la");
 			java.sql.Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
-			System.out.println("ou alors ");
 			rs.next();
-			System.out.println("merde");
-
 			String location = rs.getString(3);
-			System.out.println(location);
 			ressource.setLocalisation(location);
 			return ressource;
 		} catch (SQLException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("ca va etre null");
 		return null;
-		
 	}
 	
 	/**

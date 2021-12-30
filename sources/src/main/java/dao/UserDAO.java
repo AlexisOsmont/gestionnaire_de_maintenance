@@ -3,6 +3,7 @@ package dao;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import beans.Ressource;
 import beans.User;
 
 /**
@@ -44,10 +46,10 @@ public class UserDAO {
 	private static final String SQL_SELECT_PWD_USER				= String.format("SELECT pwd FROM %s WHERE username=?", DAOFactory.TABLE_USER);
 	
 	// Requ�te qui insert une ligne dans la table User
-	private static final String SQL_INSERT 						= String.format("INSERT INTO %s VALUES (?, ?, ?, ?, ?);", DAOFactory.TABLE_USER);
+	private static final String SQL_INSERT 						= String.format("INSERT INTO Utilisateurs VALUES (?, ?, ?, ?);", DAOFactory.TABLE_USER);
 	
 	// Requ�te qui met � jour les informations d'un utilisateur dans la table User
-	private static final String SQL_UPDATE_BY_ID				= String.format("UPDATE %s SET username=?, pwd=? WHERE idUser=?", DAOFactory.TABLE_USER);
+	private static final String SQL_UPDATE_BY_ID				= String.format("UPDATE %s SET username=?, pwd=?, job=? WHERE idUser=?", DAOFactory.TABLE_USER);
 
 	// Algorithme de hachage utilis� pour le stockage des mots de passe
 	private static final String DIGEST_ALGO = "SHA-256";
@@ -56,14 +58,7 @@ public class UserDAO {
 	// COMMANDES
 
 	
-	/**
-	 * Contructeur de l'objet, prend en param�tre un DAOFactory uniquement si DAOFactory.dbIsValidate()
-	 * @param factory
-	 */
-	UserDAO(DAOFactory factory) {
-		this.factory = factory;
-	}
-	
+
 	// REQUETES
 	
 	/**
@@ -72,32 +67,20 @@ public class UserDAO {
 	 * @return User user : user.getId() == id
 	 * @throws DAOException
 	 */
-	public User getUser(Long id) throws DAOException {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		User user = null;
-		
+	public String getUserName(String userName) throws DAOException {
 		try {
-			connection = factory.getConnection();
-			preparedStatement = DAOFactory.initializePreparedRequest(
-					connection, 
-					SQL_SELECT_BY_ID, 
-					false,
-					id);
-			
-			resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
-				user = map(resultSet);
-			} else {
-				throw new DAOException("Any user corresponding to id='" + id + "'.");
-			}
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			DAOFactory.close(resultSet, preparedStatement, connection);
+			String query = "select * from Utilisateur where username="+userName;
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			java.sql.Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			rs.next();
+			String userNameFound = rs.getString(2);
+			return userNameFound;
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		return user;
+		return null;
 	}
 	
 	/**
@@ -352,27 +335,18 @@ public class UserDAO {
 	 * @throws DAOException
 	 */
 	public void createUser(User user) throws DAOException {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		
 		try {
-			Long maxId = getNextId() + 1;
-			connection = factory.getConnection();
-			preparedStatement = DAOFactory.initializePreparedRequest(
-					connection, 
-					SQL_INSERT,
-					false,
-					maxId, user.getUsername(), user.getPassword(), user.getRole());
-			
-			int status = preparedStatement.executeUpdate();
-			if (status == 0) {
-				throw new DAOException("Creating user failed !");
-			}
-			user.setId(maxId);
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			DAOFactory.close(preparedStatement, connection);
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			PreparedStatement pst = con.prepareStatement(SQL_INSERT);
+			pst.setLong(1,0);
+			pst.setString(2,user.getUsername());
+			pst.setString(3,user.getPassword());
+			pst.setString(4,user.getRole());
+			pst.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

@@ -113,7 +113,7 @@ public class DAOFactory {
 	 * @return {@link dao.UserDAO}
 	 */
 	public UserDAO getUtilisateurDao() {
-		return new UserDAO(this);
+		return null;
 	}
     
 	/**
