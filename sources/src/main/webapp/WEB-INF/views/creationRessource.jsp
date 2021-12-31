@@ -6,6 +6,9 @@
 	Cette page n'est accessible que lorsque l'utilisateur est connecté
 	Le nombre maximum de colonne possible d'un kanban est de 7
  -->
+ <%@page import="beans.User"%>
+ 
+ 
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,7 +21,12 @@
 		<!--
 			Description du formulaire de la création de la ressource 
 		 -->
-		 
+		 <%
+		User user = session.getAttribute("user") != null ? (User) session.getAttribute("user") : null;
+		%>
+		<ul class="ulMenu">
+				<li id="page"><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></li>
+		</ul>
 		<div id="container">
 			<form method="post">
 				<div>

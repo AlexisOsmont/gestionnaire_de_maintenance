@@ -49,18 +49,18 @@ public class Home extends HttpServlet {
 			String passwd = request.getParameter("password");
 			String userName = request.getParameter("login");
 			this.userDao = new UserDAO();
-			User userFound = userDao.getUserName(userName);
+			System.out.println("username :"+userName);
+			User userFound = userDao.connexion(userName, passwd);
 			System.out.println("user dans servlets home :"+userFound.getUsername());
 			if (userFound == null) {
 				request.setAttribute("infoLogin", "Data in login form was invalid, the password is not correct !");
 	            doGet(request, response);
 			} else {
+				
 				HttpSession session = request.getSession();
 
 				session.setAttribute("user",  userFound);
 				System.out.println("user dans servlets home :"+userFound.getRole());
-				DemandeDAO listDemandes = new DemandeDAO();
-				session.setAttribute("demandes", listDemandes.recupDemandes());
 		        response.sendRedirect(request.getContextPath() + "/Profile");
 
 	           // this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);	

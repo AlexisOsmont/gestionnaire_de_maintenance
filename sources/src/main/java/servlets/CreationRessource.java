@@ -57,6 +57,6 @@ public class CreationRessource extends HttpServlet {
 			ressource.setLocalisation(localisation);
 			ressource.setUserId((long) 1);
 			ressourceDao.createRessource(ressource);
-	        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);	
+	        response.sendRedirect(request.getContextPath() + "/Profile");
 	}
 }

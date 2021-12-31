@@ -46,7 +46,7 @@
 	</ul>
 	<%  	if (user.getRole() != "admin") {%>
 				<%
-		List<Demande> listDemandes = (List<Demande>) session.getAttribute("demandes");
+		List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
 		%>
 		<ul>
 		<%
@@ -58,10 +58,10 @@
 		
 		%>
 		</ul>
-		<div>
-			<input type="submit" id="submit-form" value="Créer une ressource">
-		</div>
+		 <form method="POST">  
+       		<input type="submit"/>  
+     	</form> 
+		<%} else { %>
 		<%} %>
-		
 </body>
 </html>

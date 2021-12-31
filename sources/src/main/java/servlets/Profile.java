@@ -18,22 +18,19 @@ public class Profile extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		User userFound = (User) session.getAttribute("user");
-		System.out.println("user dans servlets doget Profile :"+userFound.getUsername());
-		
 		DemandeDAO listDemandes = new DemandeDAO();
-		session.setAttribute("demandes", listDemandes.recupDemandes());
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+
+		request.setAttribute("demandes", listDemandes.recupDemandesId(user.getId()));
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/creationRessource.jsp").forward(request, response);
-
-		//Pour vérifier l'ajout
-		  //this.getServletContext().getRequestDispatcher("/WEB-INF/views/CreationCompte").forward(request, response);
+		System.out.println("dopost profile");
+        response.sendRedirect(request.getContextPath() + "/CreationRessource");
 	}
 
 }
