@@ -19,30 +19,22 @@ public class DemandeDAO {
 		ResultSet resultat = null;
 		
 		loadDatabase();
-		System.out.println("Chargement de la database fait");
 		
 		try {			
 			statement = connexion.createStatement();
 			
 			// Exécution de la requête
 			resultat = statement.executeQuery("SELECT * FROM Demande WHERE 1");
-			System.out.println("Exécution de la requete fait");
 			
 			// Récupération des données
 			while (resultat.next()) {
 				System.out.println(resultat);
 				int idRequest = resultat.getInt("idRequest");
-				System.out.println("Récupération de idRequest : " + String.valueOf(idRequest));
 				int idUser = resultat.getInt("idUser");
-				System.out.println("Récupération de idUser : " + String.valueOf(idUser));
 				int idSource = resultat.getInt("idSource");
-				System.out.println("Récupération de idSource : " + String.valueOf(idSource));
 				int idManagerMaint = resultat.getInt("idManagerMaint");
-				System.out.println("Récupération de idManagerMaint : " + String.valueOf(idManagerMaint));
 				String state = resultat.getString("state");
-				System.out.println("Récupération de state : " + state);
 				String description = resultat.getString("description");
-				System.out.println("Récupération de description : " + description);
 				
 				Demande demande = new Demande();
 				demande.setIdRequest(idRequest);
@@ -52,10 +44,8 @@ public class DemandeDAO {
 				demande.setState(state);
 				demande.setDescription(description);
 				
-				System.out.println("Création de l'objet fait");
 				
 				listDemandes.add(demande);
-				System.out.println("Ajout de l'objet à la liste d'objet fait");
 			}
 		} catch (SQLException e) {
 		} finally {
@@ -68,6 +58,20 @@ public class DemandeDAO {
 			}
 		}
 		return listDemandes;
+	}
+	
+	public void setDemandeValide(long id) {
+		loadDatabase();
+		try {
+			PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE Demande SET state=? WHERE idRequest=?");
+			preparedStatement.setString(1, "valid");
+			preparedStatement.setInt(2, (int)id);	
+			preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -108,19 +112,12 @@ public class DemandeDAO {
 			
 			// Récupération des données
 			while (resultat.next()) {
-				System.out.println(resultat);
 				int idRequest = resultat.getInt("idRequest");
-				System.out.println("Récupération de idRequest : " + String.valueOf(idRequest));
 				int idUser = resultat.getInt("idUser");
-				System.out.println("Récupération de idUser : " + String.valueOf(idUser));
 				int idSource = resultat.getInt("idSource");
-				System.out.println("Récupération de idSource : " + String.valueOf(idSource));
 				int idManagerMaint = resultat.getInt("idManagerMaint");
-				System.out.println("Récupération de idManagerMaint : " + String.valueOf(idManagerMaint));
 				String state = resultat.getString("state");
-				System.out.println("Récupération de state : " + state);
 				String description = resultat.getString("description");
-				System.out.println("Récupération de description : " + description);
 				
 				Demande demande = new Demande();
 				demande.setIdRequest(idRequest);
@@ -130,10 +127,8 @@ public class DemandeDAO {
 				demande.setState(state);
 				demande.setDescription(description);
 				
-				System.out.println("Création de l'objet fait");
 				
 				listDemandes.add(demande);
-				System.out.println("Ajout de l'objet à la liste d'objet fait");
 			}
 		} catch (SQLException e) {
 		} finally {
@@ -147,6 +142,53 @@ public class DemandeDAO {
 		}
 		return listDemandes;
 	}
+	
+	// récupère les demandes lié à l'identifiant source id
+    public List<Demande> recupDemandesIdSource(long id) {
+        List<Demande> listDemandes = new ArrayList<Demande>();
+        java.sql.Statement statement = null; //représente requête SQL
+        ResultSet resultat = null;
+
+        loadDatabase();
+
+        try {
+            statement = connexion.createStatement();
+
+            // Exécution de la requête
+            resultat = statement.executeQuery("SELECT * FROM Demande WHERE idSource="+id);
+
+            // Récupération des données
+            while (resultat.next()) {
+                int idRequest = resultat.getInt("idRequest");
+                int idUser = resultat.getInt("idUser");
+                int idSource = resultat.getInt("idSource");
+                int idManagerMaint = resultat.getInt("idManagerMaint");
+                String state = resultat.getString("state");
+                String description = resultat.getString("description");
+
+                Demande demande = new Demande();
+                demande.setIdRequest(idRequest);
+                demande.setIdUser(idUser);
+                demande.setIdSource(idSource);
+                demande.setIdManagerMaint(idManagerMaint);
+                demande.setState(state);
+                demande.setDescription(description);
+
+
+                listDemandes.add(demande);
+            }
+        } catch (SQLException e) {
+        } finally {
+            // Fermeture de la connexion à la base de données
+            try {
+                if (resultat != null) resultat.close();
+                if (statement != null) statement.close();
+                if (connexion != null) connexion.close();
+            } catch (SQLException ignore) {
+            }
+        }
+        return listDemandes;
+    }
 	
 	// UTILS
 	

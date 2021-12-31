@@ -44,24 +44,45 @@
 	<ul class="ulMenu">
 			<li id="page"><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></li>
 	</ul>
-	<%  	if (user.getRole() != "admin") {%>
-				<%
-		List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
-		%>
-		<ul>
-		<%
-		for (Demande demandeBuf : listDemandes) {
-		%>
-			<li> <%= demandeBuf.getDescription() %></li>
-		<%
-		} 
-		
-		%>
-		</ul>
-		 <form method="POST">  
-       		<input type="submit"/>  
-     	</form> 
+	<%  if (!user.getRole().equals("admin")) {%>
+   			<p>Liste des Demandes :</p><br>
+	
+			<%
+			List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
+			for (Demande demandeBuf : listDemandes) {
+				if(!demandeBuf.getState().equals("valid")) {
+			%>
+			<form method="POST"> 
+				<label><%= demandeBuf.getDescription() %></label>
+				<button type="submit" name="validerDemande" value="<%=demandeBuf.getIdRequest()%>"> Valider<%=demandeBuf.getIdRequest()%> </button>
+   			</form> 
+			<br>
+			<%
+				}
+			} 
+			%>
+    		<p>Liste des ressources :</p>
+			<%
+			List<Ressource> listRessource = (List<Ressource>) request.getAttribute("ressource");
+			%>
+			<%
+			for (Ressource ressourceBuf : listRessource) {
+			%>
+				<form method="POST">  <label><%= ressourceBuf.getNom()%></label>
+      				<button type="submit" name="suppRessource" value="<%=ressourceBuf.getId()%>"> Supprimer </button>  
+    			</form> 
+    			<br>
+			<%
+			} 
+			
+			%>
+			<form method="POST">  
+	       		<input type="submit" name="CreationRessource" value="CreationRessource"/>  
+	     	</form> 
 		<%} else { %>
+			 <form method="POST">  
+       			<input type="submit" name="CreationUser" value="CreationUser"/>  
+     		</form> 
 		<%} %>
 </body>
 </html>

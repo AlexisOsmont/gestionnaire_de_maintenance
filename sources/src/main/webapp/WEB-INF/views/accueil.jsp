@@ -2,8 +2,10 @@
     pageEncoding="UTF-8"%>
 
 <%@ page import="dao.DemandeDAO" %>
+<%@ page import="dao.RessourceDAO" %>
 <%@ page import ="java.util.List"%>
 <%@ page import="beans.Demande" %>
+<%@ page import="beans.Ressource" %>
 
 <!DOCTYPE html>
 <html>
@@ -12,6 +14,15 @@
 <title>Accueil</title>
 </head>
 <body>
+	<%
+	List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
+	Ressource ressource = (Ressource) request.getAttribute("ressource");
+	%>
+	<h1>
+		<%= ressource.getNom()%> : <%= ressource.getLocalisation()%>
+	</h1>
+	<p>Description de la ressource :<br> <br> <%= ressource.getDescription() %></p>
+	
 	<div id="formulaire">
 		<form method="post" action="accueil">
 			<span>
@@ -23,9 +34,8 @@
 			</span>
 		</form>
 	</div>
-	<%
-	List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
-	%>
+	
+	<p>Exemple d'anomalie précédemment rentré par des utilisateurs :</p>
 	<ul>
 	<%
 	for (Demande demande : listDemandes) {

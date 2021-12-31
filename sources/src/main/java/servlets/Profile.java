@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.DemandeDAO;
+import dao.RessourceDAO;
 import beans.Demande;
 import beans.User;
 
@@ -19,10 +20,12 @@ public class Profile extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		DemandeDAO listDemandes = new DemandeDAO();
+		RessourceDAO listRessource = new RessourceDAO();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
 		request.setAttribute("demandes", listDemandes.recupDemandesId(user.getId()));
+		request.setAttribute("ressource", listRessource.recupRessourceRespId(user.getId()));
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
 	}
@@ -30,7 +33,26 @@ public class Profile extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		System.out.println("dopost profile");
-        response.sendRedirect(request.getContextPath() + "/CreationRessource");
+		DemandeDAO listDemandes = new DemandeDAO();
+		RessourceDAO listRessource = new RessourceDAO();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+
+		request.setAttribute("demandes", listDemandes.recupDemandesId(user.getId()));
+		request.setAttribute("ressource", listRessource.recupRessourceRespId(user.getId()));
+		if (request.getParameter("CreationRessource") != null) {
+	        response.sendRedirect(request.getContextPath() + "/CreationRessource");
+		} else if (request.getParameter("CreationUser") != null) {
+	        response.sendRedirect(request.getContextPath() + "/CreationCompte");
+		} else if (request.getParameter("suppRessource") != null) {
+			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+		} else if (request.getParameter("validerDemande") != null) {
+			DemandeDAO dao = new DemandeDAO();
+			dao.setDemandeValide( (long) Integer.parseInt(request.getParameter("validerDemande")));
+			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+		} else { 
+			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+		}
 	}
 
 }
