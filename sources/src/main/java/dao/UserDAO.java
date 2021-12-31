@@ -67,16 +67,33 @@ public class UserDAO {
 	 * @return User user : user.getId() == id
 	 * @throws DAOException
 	 */
-	public String getUserName(String userName) throws DAOException {
+	public User getUserName(String userName) throws DAOException {
 		try {
-			String query = "select * from Utilisateur where username="+userName;
+			String query = "select * from Utilisateurs where IdUser=2";
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			System.out.println("opopop");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			System.out.println("ipipip");
+
 			java.sql.Statement st = con.createStatement();
+
+			System.out.println("apapapap");
+
 			ResultSet rs = st.executeQuery(query);
+			System.out.println("opopop");
+
 			rs.next();
-			String userNameFound = rs.getString(2);
-			return userNameFound;
+			String userNameFound = rs.getString("username");
+			System.out.println("opopop :"+userNameFound);
+			User userFound = new User();
+			userFound.setUsername(userNameFound);
+			userFound.setPassword(rs.getString("pwd"));
+			userFound.setId(rs.getInt("idUser"));
+			userFound.setRole(rs.getString("job"));
+
+			
+			
+			return userFound;
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
