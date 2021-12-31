@@ -81,9 +81,9 @@ public class DemandeDAO {
 		try {
 			PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO Demande(idRequest, idUser, idSource, idManagerMaint, state, description) VALUES(?,?,?,?,?,?);");
 			preparedStatement.setInt(1, demande.getIdRequest());
-			preparedStatement.setInt(2, demande.getIdUser());
-			preparedStatement.setInt(3, demande.getIdSource());
-			preparedStatement.setInt(4, demande.getIdManagerMaint());
+			preparedStatement.setInt(2, (int)demande.getIdUser());
+			preparedStatement.setInt(3, (int)demande.getIdSource());
+			preparedStatement.setInt(4, (int)demande.getIdManagerMaint());
 			preparedStatement.setString(5, demande.getState());
 			preparedStatement.setString(6, demande.getDescription());
 			

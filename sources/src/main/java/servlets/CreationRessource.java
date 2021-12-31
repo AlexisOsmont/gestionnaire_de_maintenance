@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.Ressource;
+import beans.User;
 import dao.RessourceDAO;
 
 
@@ -46,6 +47,8 @@ public class CreationRessource extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			System.out.println("je suis dans le servlets");
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("user");
 			String name = request.getParameter("name");
 			String localisation = request.getParameter("localisation");
 			String description = request.getParameter("description");
@@ -55,7 +58,7 @@ public class CreationRessource extends HttpServlet {
 			ressource.setDescription(description);
 			ressource.setNom(name);
 			ressource.setLocalisation(localisation);
-			ressource.setUserId((long) 1);
+			ressource.setUserId(user.getId());
 			ressourceDao.createRessource(ressource);
 	        response.sendRedirect(request.getContextPath() + "/Profile");
 	}

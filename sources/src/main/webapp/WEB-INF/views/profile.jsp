@@ -41,11 +41,9 @@
 	<%
 		User user = session.getAttribute("user") != null ? (User) session.getAttribute("user") : null;
 	%>
-	<ul class="ulMenu">
-			<li id="page"><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></li>
-	</ul>
+	<h3><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></h3>
 	<%  if (!user.getRole().equals("admin")) {%>
-   			<p>Liste des Demandes :</p><br>
+   			<h2>Liste des Demandes :</h2><br>
 	
 			<%
 			List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
@@ -54,21 +52,21 @@
 			%>
 			<form method="POST"> 
 				<label><%= demandeBuf.getDescription() %></label>
-				<button type="submit" name="validerDemande" value="<%=demandeBuf.getIdRequest()%>"> Valider<%=demandeBuf.getIdRequest()%> </button>
+				<button type="submit" name="validerDemande" value="<%=demandeBuf.getIdRequest()%>"> Valider </button>
    			</form> 
 			<br>
 			<%
 				}
 			} 
 			%>
-    		<p>Liste des ressources :</p>
+    		<h2>Liste des ressources :</h2>
 			<%
 			List<Ressource> listRessource = (List<Ressource>) request.getAttribute("ressource");
 			%>
 			<%
 			for (Ressource ressourceBuf : listRessource) {
 			%>
-				<form method="POST">  <label><%= ressourceBuf.getNom()%></label>
+				<form method="POST">  <label><%= ressourceBuf.getNom()%>:<%=ressourceBuf.getLocalisation() %>-> (<%=ressourceBuf.getDescription() %>)</label>
       				<button type="submit" name="suppRessource" value="<%=ressourceBuf.getId()%>"> Supprimer </button>  
     			</form> 
     			<br>
@@ -80,6 +78,20 @@
 	       		<input type="submit" name="CreationRessource" value="CreationRessource"/>  
 	     	</form> 
 		<%} else { %>
+			<h2>Liste des responsables de maintenance :</h2><br>
+	
+			<%
+			List<User> listUser = (List<User>) request.getAttribute("Users");
+			for (User userBuf : listUser) {
+			%>
+			<form method="POST"> 
+				<label>Username : <%= userBuf.getUsername() %>  <br> mot de pass : <%= userBuf.getPassword()%></label><br>
+				<button type="submit" name="suppUser" value="<%=userBuf.getId()%>"> Supprimer </button>
+   			</form> 
+			<br>
+			<%
+			} 
+			%>
 			 <form method="POST">  
        			<input type="submit" name="CreationUser" value="CreationUser"/>  
      		</form> 

@@ -3,9 +3,9 @@ package beans;
 public class Demande {
 	// ATTRIBUTS
 	private int idRequest;
-	private int idUser;
-	private int idSource;
-	private int idManagerMaint;
+	private long idUser;
+	private long idSource;
+	private long idManagerMaint;
 	private String state;
 	private String description;
 	
@@ -13,13 +13,13 @@ public class Demande {
 	public int getIdRequest() {
 		return idRequest;
 	}
-	public int getIdUser() {
+	public long getIdUser() {
 		return idUser;
 	}
-	public int getIdSource() {
+	public long getIdSource() {
 		return idSource;
 	}
-	public int getIdManagerMaint() {
+	public long getIdManagerMaint() {
 		return idManagerMaint;
 	}
 	public String getState() {
@@ -33,13 +33,13 @@ public class Demande {
 	public void setIdRequest(int idRequest) {
 		this.idRequest = idRequest;
 	}
-	public void setIdUser(int idUser) {
+	public void setIdUser(long idUser) {
 		this.idUser = idUser;
 	}
-	public void setIdSource(int idSource) {
+	public void setIdSource(long idSource) {
 		this.idSource = idSource;
 	}
-	public void setIdManagerMaint(int idManagerMaint) {
+	public void setIdManagerMaint(long idManagerMaint) {
 		this.idManagerMaint = idManagerMaint;
 	}
 	public void setState(String state) {

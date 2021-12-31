@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import beans.Demande;
+import beans.Ressource;
 import beans.User;
 
 /**
@@ -22,9 +26,15 @@ public class UserDAO {
 	// ATTRIBUTS 
 	
 	// Requ�te qui insert une ligne dans la table User
-	private static final String SQL_INSERT 						= String.format("INSERT INTO Utilisateurs VALUES (?, ?, ?, ?);", DAOFactory.TABLE_USER);
-	
+	private static final String SQL_INSERT 						= String.format("INSERT INTO %s VALUES (?, ?, ?, ?);", DAOFactory.TABLE_USER);
+	private static final String SQL_DEL 						= String.format("DELETE FROM %s WHERE idUser=?;", DAOFactory.TABLE_USER);
+	private static final String SQL_DEL_ALL_RESS 				= String.format("DELETE FROM %s WHERE idManagerMaint=?;", DAOFactory.TABLE_DEMANDE);
+	private static final String SQL_DEL_ALL_DEM 				= String.format("DELETE FROM %s WHERE idManagerMaint=?;", DAOFactory.TABLE_RESSOURCE);
 
+
+	
+	private Connection connexion;
+	
 	// COMMANDES
 
 	
@@ -60,6 +70,47 @@ public class UserDAO {
 		return null;
 	}
 	
+	public List<User> recupRespon() {
+
+		List<User> listUser = new ArrayList<User>();
+		java.sql.Statement statement = null; //représente requête SQL
+		ResultSet resultat = null;
+		
+		loadDatabase();
+
+		try {			
+			statement = connexion.createStatement();
+			// Exécution de la requête
+			PreparedStatement ps = connexion.prepareStatement("SELECT * FROM Utilisateurs WHERE job!=?");
+			ps.setString(1, "admin");
+			ResultSet rs = ps.executeQuery();
+
+			// Récupération des données
+			while (rs.next()) {
+				int idUser = rs.getInt("idUser");
+				String userName = rs.getString("username");
+				String pwd = rs.getString("pwd");
+				String role = rs.getString("job");
+				User user = new User();
+				user.setId((long) idUser);
+				user.setUsername(userName);
+				user.setPassword(pwd);
+				user.setRole(role);
+				listUser.add(user);
+			}
+		} catch (SQLException e) {
+		} finally {
+			// Fermeture de la connexion à la base de données
+			try {
+				if (resultat != null) resultat.close();
+				if (statement != null) statement.close();
+				if (connexion != null) connexion.close();
+			} catch (SQLException ignore) {
+			}
+		}
+		return listUser;
+	}
+	
 	// COMMANDES
 
 	/**
@@ -84,6 +135,26 @@ public class UserDAO {
 		
 	}
 	
+	public void suppUser(long id) throws DAOException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			PreparedStatement pst1 = con.prepareStatement(SQL_DEL_ALL_DEM);
+			PreparedStatement pst2 = con.prepareStatement(SQL_DEL_ALL_RESS);
+			pst2.setLong(1,id);
+			pst2.executeUpdate();
+			pst1.setLong(1,id);
+			pst1.executeUpdate();
+
+			PreparedStatement pst3 = con.prepareStatement(SQL_DEL);
+			pst3.setLong(1,id);
+			pst3.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * M�thode priv�e permettant d'analyser le r�sultat d'une requ�te contenant les donn�es d'un utilisateur
 	 * @param resultSet
@@ -98,5 +169,19 @@ public class UserDAO {
 		user.setRole(resultSet.getString("job"));
 		
 		return user;
+	}
+	
+	private void loadDatabase() {
+		// Chargement du driver JDBC
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		}
+		
+		try {
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "Alexis", "Alexis");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

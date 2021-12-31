@@ -25,7 +25,11 @@ public class RessourceDAO {
 	// ATTRIBUTS 
 	
 	// Requ�te qui insert une ligne dans la table User
-	private static final String SQL_INSERT 						= String.format("INSERT INTO Ressources VALUES (?, ?, ?, ?, ?);", DAOFactory.TABLE_RESSOURCE);
+	private static final String SQL_INSERT 						= String.format("INSERT INTO %s VALUES (?, ?, ?, ?, ?);", DAOFactory.TABLE_RESSOURCE);
+	private static final String SQL_DEL 						= String.format("DELETE FROM %s WHERE idSource=?;", DAOFactory.TABLE_RESSOURCE);
+	private static final String SQL_FIND						= String.format("SELECT * FROM %s WHERE idManagerMaint=?;", DAOFactory.TABLE_RESSOURCE);
+
+
 		
 	private Connection connexion;
 	
@@ -47,6 +51,7 @@ public class RessourceDAO {
 			PreparedStatement pst = con.prepareStatement(SQL_INSERT);
 			pst.setLong(1,0);
 			pst.setLong(2,ressource.getUserId());
+			System.out.println(ressource.getUserId());
 			pst.setString(3,ressource.getLocalisation());
 			pst.setString(4,ressource.getDescription());
 			pst.setString(5,ressource.getNom());
@@ -55,6 +60,47 @@ public class RessourceDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void suppRessource(long id) throws DAOException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			PreparedStatement pst = con.prepareStatement(SQL_DEL);
+			pst.setLong(1,id);
+			pst.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public long findRespon(long id) throws DAOException {
+		java.sql.Statement statement = null; //représente requête SQL
+		ResultSet resultat = null;
+		
+		loadDatabase();
+		System.out.println("Chargement de la database fait ressourcerespid");
+		try {
+		statement = connexion.createStatement();
+		
+		// Exécution de la requête
+		String query = "SELECT * FROM Ressources WHERE idManagerMaint=?";
+		PreparedStatement ps = connexion.prepareStatement(query);
+		ps.setLong(1, id);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int idRespon = rs.getInt("idManagerMaint");
+		
+		
+		// Récupération des données
+		
+
+		return (long)idRespon;
+		} catch(SQLException e) {
+			
+		}
+		return 1;
 	}
 	
 	

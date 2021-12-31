@@ -16,7 +16,7 @@
 <body>
 	<%
 	List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
-	Ressource ressource = (Ressource) request.getAttribute("ressource");
+	Ressource ressource = (Ressource) session.getAttribute("ressource");
 	%>
 	<h1>
 		<%= ressource.getNom()%> : <%= ressource.getLocalisation()%>

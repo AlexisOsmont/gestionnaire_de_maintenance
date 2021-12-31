@@ -56,6 +56,6 @@ public class CreationCompte extends HttpServlet {
 			user.setUsername(userName);
 			user.setRole(role);
 			userDao.createUser(user);
-	        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);	
+	        response.sendRedirect(request.getContextPath() + "/Profile");
 	}
 }

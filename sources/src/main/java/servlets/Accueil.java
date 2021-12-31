@@ -31,34 +31,37 @@ public class Accueil extends HttpServlet {
 		HttpSession session = request.getSession();
 		request.setCharacterEncoding("UTF-8");
 		String idRessource = request.getParameter("id");
-		session.setAttribute("id", Integer.parseInt(idRessource));
 		
 		DemandeDAO listDemandes = new DemandeDAO();
 		request.setAttribute("demandes", listDemandes.recupDemandesIdSource(Long.valueOf(idRessource).longValue()));
 		
 		RessourceDAO ressourceDB = new RessourceDAO();
 		Ressource ressource = new Ressource();
-		ressource = ressourceDB.recupRessourceId(Long.valueOf(idRessource).longValue());
-		request.setAttribute("ressource", ressource);
+		ressource = ressourceDB.recupRessourceId(Integer.valueOf(idRessource).intValue());
+		session.setAttribute("ressource", ressource);
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/accueil.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getParameter("id") == null) {
 	        this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-
 		}
 		
 		request.setCharacterEncoding("UTF-8");
-		String idRessource = request.getParameter("id");
 		Demande demande = new Demande();
 		HttpSession session = request.getSession();
+		Ressource ressource = (Ressource) session.getAttribute("ressource");
+		RessourceDAO ressourceDao = new RessourceDAO();
+		System.out.println(ressource.getId());
+		long idRespon = (long) ressourceDao.findRespon(ressource.getId());
+		ressource.setUserId(idRespon);
+		System.out.println("blabla"+idRespon);
 		
 		demande.setIdRequest(0);
-		demande.setIdUser(8);
-		demande.setIdSource((int) session.getAttribute("id"));
-		demande.setIdManagerMaint(Integer.parseInt(idRessource));
-		demande.setState("Test ajout d'une requÃªte");
+		demande.setIdUser(000);
+		demande.setIdSource(ressource.getId());
+		demande.setIdManagerMaint(ressource.getUserId());
+		demande.setState("en attente");
 		demande.setDescription(request.getParameter("anomalie"));
 		
 		DemandeDAO tableDemande = new DemandeDAO();
