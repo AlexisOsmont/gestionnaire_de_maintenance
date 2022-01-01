@@ -46,7 +46,7 @@ public class DAOFactory {
 			{"job",				"VARCHAR",		"100"},
 	};
 	private static final String[][] TABLE_DEMANDE_ROWS = {
-			{"id", 					"INT"},						// Sp�cifique � la manipulation interne des donn�es
+			{"idRequest", 					"INT"},						// Sp�cifique � la manipulation interne des donn�es
 			{"idUser", 				"INT"}, 
 			{"idSource", 			"INT"}, 
 			{"idManagerMaint", 		"INT"}, 
@@ -55,9 +55,11 @@ public class DAOFactory {
 	};
 	private static final String[][] TABLE_RESSOURCE_ROWS = {
 			{"idSource", 		"INT"},						// Sp�cifique � la manipulation interne des donn�es
-			{"idUser",			"INT"},
+			{"idManagerMaint",	"INT"},
 			{"localisation", 	"VARCHAR",		"100"},
-			{"description",			"VARCHAR",		SIZE_TEXTAREA}
+			{"description",		"VARCHAR",		SIZE_TEXTAREA},
+			{"nom", 			"VARCHAR",		"100"}
+
 	};
 
 	// Contraintes des tables
@@ -66,22 +68,16 @@ public class DAOFactory {
 			"ALTER TABLE Demande ADD FOREIGN KEY FK_DEMANDE_RESPON (idManagerMaint) REFERENCES Utilisateurs(idUser)"
 	};
 	private static final String[] CONS_RESSOURCE_PK = {
-			"ALTER TABLE Ressources ADD FOREIGN KEY FK_RESSOURCE_USER (idUser) REFERENCES Utilisateurs(idUser)",					
+			"ALTER TABLE Ressources ADD FOREIGN KEY FK_RESSOURCE_USER (idManagerMaint) REFERENCES Utilisateurs(idUser)",					
 	};
 	
 	// Liste des tables 
 	//		Etant d�fini tel qu'un nom, les informations des colonnes, et des contraintes
 	private static final Object[][] LIST_TABLES		  = {
 			{TABLE_USER,		TABLE_USER_ROWS},
-			{TABLE_DEMANDE, 	TABLE_DEMANDE_ROWS,	CONS_DEMANDE_PK},
-			{TABLE_RESSOURCE, 	TABLE_RESSOURCE_ROWS,	CONS_RESSOURCE_PK},
+			{TABLE_RESSOURCE, 	TABLE_RESSOURCE_ROWS},
+			{TABLE_DEMANDE, 	TABLE_DEMANDE_ROWS}
 	};
-	
-	private static final boolean VERIFY_TABLE = true;
-	
-	/*
-			--------- INFORMATIONS DU DAOFACTORY FILE --------- 
-	*/
 
 	// nom de l'attribut dans les servlets contenant le DAOFactory
 	public static final String NAME_ATT 			  = "daofactory";
@@ -92,7 +88,6 @@ public class DAOFactory {
 	private static final String PROP_DRIVER			  = "driver";
 	private static final String PROP_USER			  = "user";
 	private static final String PROP_PASSWORD		  = "password";
-	private static boolean is_validate 				  = false;
 	
 	/*
 			--------- INFORMATIONS DE L'OBJET DAOFACTORY --------- 
@@ -107,58 +102,47 @@ public class DAOFactory {
 		this.user = user;
 		this.password = password;
 	}
-    
-	/**
-	 * Renvoie un objet DAO pour les utilisateurs
-	 * @return {@link dao.UserDAO}
-	 */
-	public UserDAO getUtilisateurDao() {
-		return null;
-	}
-    
-	/**
-	 * Renvoie un objet DAO pour les kanbans
-	 * @return {@link dao.KanbanDAO}
-	 *
-	public DemandeDAO getDemandeDao() {
-		return new DemandeDAO(this);
-	}
-	*/
-	/**
-	 * Renvoie un objet DAO pour les taches
-	 * @return {@link com.test.dao.RessourceDAO}
-	 */
-	public RessourceDAO getRessourceDao() {
-		return null;
-	}
 	
-	/**
-	 * Renvoie vrai uniquement si la configuration d'acc�s � la base
-	 * 	de donn�es � �t� correctement faite, et valid�
-	 */
-	public static boolean dbIsValidate() {
-		return DAOFactory.is_validate;
-	}
-	
-	/**
+    /**
 	 * Permet de valider la configuration � la base de donn�e
 	 * TODO : la v�rification que la configuration d'acc�s est correcte doit �tre faite
 	 * 	ici
 	 */
-	public static void setValidationdb(boolean bool) {
-		//if (DAOFactory.verifyConfiguration()) {
-			DAOFactory.is_validate = bool;
-			if (bool) {
-		    	try {
-		    		if (VERIFY_TABLE) {
-		    			DAOFactory instance = DAOFactory.getInstance();
-		            	verifyTables(instance);
-		    		}
-		    	} catch (DAOConfigurationException e) {
-		    		throw e;
-		    	}
-			}
-		//}
+	public static void setDataBase() {
+		DAOFactory instance = DAOFactory.getInstance();
+    	verifyTables(instance);  
+	}
+	
+	public static void insertAdmin(String urlParam,String userParam,String pwdParam) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection(urlParam,userParam,pwdParam);
+			PreparedStatement pst = con.prepareStatement("INSERT INTO Utilisateurs VALUES (?, ?, ?, ?)");
+			pst.setLong(1,0);
+			pst.setString(2,"admin");
+			pst.setString(3,"admin");
+			pst.setString(4,"admin");
+			pst.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void insertRespon(String urlParam,String userParam,String pwdParam) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			Connection con = DriverManager.getConnection(urlParam,userParam,pwdParam);
+			PreparedStatement pst = con.prepareStatement("INSERT INTO Utilisateurs VALUES (?, ?, ?, ?)");
+			pst.setLong(1,1);
+			pst.setString(2,"responsable");
+			pst.setString(3,"responsable");
+			pst.setString(4,"responsable maintenance");
+			pst.executeUpdate();
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -289,62 +273,14 @@ public class DAOFactory {
         		// R�cup�re les m�tadonn�es de la table
             	ResultSet table = meta.getTables(null, null, nameTable, null);
             	
-            	if (!table.next()) {
-            		// Si la table n'existe pas, on la cr�er
-            		
-            		createTable(nameTable, dataColumns, consTable, factory);
-            	} else {
-            		// Si la table existe, on v�rifie que les colonnes sont les bonnes
-            		
-            		// On r�cup�re les donn�es des colonnes existantes
-            		ResultSet columns = meta.getColumns(null, null, nameTable, null);
-            		int index = 0;
-            		while(columns.next()) {
-            			
-            			// V�rifie le nom de la colonne
-            			if (!columns.getString("COLUMN_NAME").equals(dataColumns[index][0])) {
-            				break;
-            			}
-            			
-            			// V�rifie le type de la colonne
-            			if (!columns.getString("TYPE_NAME").equals(dataColumns[index][1])) {
-            				if (!(columns.getString("TYPE_NAME").equals("BIT") &&
-            						columns.getInt("COLUMN_SIZE") == 1 && 
-            						dataColumns[index][1].equals("BOOLEAN"))) {
-                				break;
-            				}
-            			}
-            			
-            			// Lorsque le type est VARCHAR, v�rifie que la taille est bonne
-            			if (columns.getString("TYPE_NAME").equals("VARCHAR") &&
-            					!Integer.toString(columns.getInt("COLUMN_SIZE")).equals(dataColumns[index][2])) {
-            				break;
-            			}
-            			++index;
-            		}
-            		
-            		// Si le nombre de colonne correspondante est diff�rent du nombre de colonne n�cessaire, alors
-            		//		les colonnes ne correspondent pas aux param�tres de la table
-            		if (index != dataColumns.length) {
-            			throw new DAOConfigurationException("Table " + nameTable + "does not contains the right columns " + index);
-            		}
-            	}
+        		createTable(nameTable, dataColumns, consTable, factory);
+            	
         	}
     	} catch (SQLException e) {
     		throw new DAOConfigurationException("Cannot verify tables required !" + e);
     	}
     }
 	
-    /**
-	 * M�thode priv�e permettant de cr�er en table de nom 'name' et de colonnes columns
-	 * 	columns doit �tre un tableau de tableau contenant un nom, un type, et sa taille si il s'agit d'un VARCHAR
-	 * 	constraint permet de d�finir une contrainte
-	 * @param name nom de la table
-	 * @param columns les donn�es des colonnes (nom, type, taille)
-	 * @param constraints les alterations de la table (contraintes)
-	 * @param factory l'objet contenant la connexion � la bdd
-	 * @throws DAOException
-	 */
     // 
     private static void createTable(String name, String[][] columns, String[] constraints, DAOFactory factory) throws DAOException {
     	Connection connection = null;

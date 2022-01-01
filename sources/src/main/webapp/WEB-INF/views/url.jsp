@@ -7,6 +7,6 @@
 <title>url</title>
 </head>
 <body>
-<a href="http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>">http://localhost:8080/gestionnaire_maintenance/acceuil?id=<%= request.getAttribute("ressourceId") %></a>
+<a href="http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>">http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %></a>
 </body>
 </html>

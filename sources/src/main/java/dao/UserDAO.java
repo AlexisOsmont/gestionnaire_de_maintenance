@@ -1,5 +1,7 @@
 package dao;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import beans.Demande;
 import beans.Ressource;
@@ -31,7 +34,14 @@ public class UserDAO {
 	private static final String SQL_DEL_ALL_RESS 				= String.format("DELETE FROM %s WHERE idManagerMaint=?;", DAOFactory.TABLE_DEMANDE);
 	private static final String SQL_DEL_ALL_DEM 				= String.format("DELETE FROM %s WHERE idManagerMaint=?;", DAOFactory.TABLE_RESSOURCE);
 
-
+	public static final String FILE_PROP			  = "/dao/dao.properties";
+	private static final String PROP_URL			  = "url";
+	private static final String PROP_USER			  = "user";
+	private static final String PROP_PASSWORD		  = "password";
+		
+	private static String url;
+	private static String userProp;
+	private static String pwdProp;
 	
 	private Connection connexion;
 	
@@ -49,9 +59,10 @@ public class UserDAO {
 	 */
 	public User connexion(String userName, String passwd) throws DAOException {
 		try {
+			verifyConfiguration();
 			String query = "select * from Utilisateurs where username IN (?) AND pwd IN (?)";
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			Connection con = DriverManager.getConnection(url, userProp, pwdProp);
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, userName);
 			ps.setString(2, passwd);
@@ -141,10 +152,11 @@ public class UserDAO {
 	 */
 	public void createUser(User user) throws DAOException {
 		try {
+			verifyConfiguration();
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			Connection con = DriverManager.getConnection(url, userProp, pwdProp);
 			PreparedStatement pst = con.prepareStatement(SQL_INSERT);
-			pst.setLong(1,0);
+			pst.setLong(1,maxId()+1);
 			pst.setString(2,user.getUsername());
 			pst.setString(3,user.getPassword());
 			pst.setString(4,user.getRole());
@@ -158,8 +170,9 @@ public class UserDAO {
 	
 	public void suppUser(long id) throws DAOException {
 		try {
+			verifyConfiguration();
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetWebDataBase","Alexis","Alexis");
+			Connection con = DriverManager.getConnection(url, userProp, pwdProp);
 			PreparedStatement pst1 = con.prepareStatement(SQL_DEL_ALL_DEM);
 			PreparedStatement pst2 = con.prepareStatement(SQL_DEL_ALL_RESS);
 			pst2.setLong(1,id);
@@ -193,6 +206,7 @@ public class UserDAO {
 	}
 	
 	private void loadDatabase() {
+		verifyConfiguration();
 		// Chargement du driver JDBC
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -200,9 +214,62 @@ public class UserDAO {
 		}
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "Alexis", "Alexis");
+			connexion = DriverManager.getConnection(url, userProp, pwdProp);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private int maxId() {
+		loadDatabase();
+		System.out.println("Chargement de la database fait ressourcerespid");
+		try {
+			PreparedStatement ps = connexion.prepareStatement("SELECT max(idUser) FROM Utilisateurs");
+			ResultSet rs = ps.executeQuery();			
+			//String query = "SELECT * FROM Ressources WHERE idManagerMaint=?";
+	
+			// Récupération des données
+			if (rs.next()) {
+				return (int) rs.getLong(1);
+			} else {
+				throw new DAOException("Error while loading max id inside tasks table.");			
+				}
+		} catch(SQLException e) {
+			throw new DAOException(e);
+		}		
+	}
+	
+	private static void verifyConfiguration() {
+    	// Properties permet de lire un fichier contenant des lignes sous la forme
+    	//		key = value
+    	//	et permet de r�cup�rer par la suite les propri�t�s � l'aide de getProperty(key) 
+    	Properties properties = new Properties();
+    	String fileUrl;
+    	String fileUser;
+    	String filePassword;
+    	
+    	// On charge le fichier dans un InputStream pour �viter de devoir donner le
+    	//		chemin absolu et g�rer une exception
+    	ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    	InputStream fileProp = classLoader.getResourceAsStream(FILE_PROP);
+    	if (fileProp == null) {
+    		return;
+    	}
+    	
+    	try {
+    		properties.load(fileProp);
+    		fileUrl = properties.getProperty(PROP_URL);
+    		fileUser = properties.getProperty(PROP_USER);
+    		filePassword = properties.getProperty(PROP_PASSWORD);
+        	String schemeProp = fileUrl.split("//")[1].split("/")[1];
+        	String adressProp = fileUrl.split("//")[1].split(":")[0];
+        	url = "jdbc:mysql://" + adressProp + ":3306/" + schemeProp;
+        	userProp = fileUser;
+        	pwdProp = filePassword;
+        	
+    	} catch (IOException e) {
+    		return;
+    	}
+	}
+	
 }

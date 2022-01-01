@@ -23,11 +23,11 @@
 			<form method="post">
 				<div>
 					<label for="name">UserName :</label>
-					<input type="text" id="userName" placeholder="Nom de la ressource" name="userName" required>
+					<input type="text" id="userName" placeholder="username" name="userName" required>
 				</div>
 				<div>
 					<label for="name">password :</label>
-					<input type="text" id="password" placeholder="Description" name="password" required>
+					<input type="text" id="password" placeholder="password" name="password" required>
 				</div>
 				<div>
 					<input type="submit" id="submit-form" value="Créer">

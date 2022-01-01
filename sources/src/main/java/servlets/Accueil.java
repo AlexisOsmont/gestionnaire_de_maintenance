@@ -14,7 +14,7 @@ import dao.RessourceDAO;
 import beans.Demande;
 import beans.Ressource;
 
-@WebServlet("/Accueil")
+@WebServlet("/accueil")
 public class Accueil extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,32 +43,34 @@ public class Accueil extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("id") == null) {
-	        this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-		}
-		
-		request.setCharacterEncoding("UTF-8");
-		Demande demande = new Demande();
 		HttpSession session = request.getSession();
-		Ressource ressource = (Ressource) session.getAttribute("ressource");
-		RessourceDAO ressourceDao = new RessourceDAO();
-		System.out.println("idRessource = " + ressource.getId());
-		long idRespon = (long) ressourceDao.findRespon(ressource.getId());
-		System.out.println("Retour de idRespon : " + idRespon);
-		ressource.setUserId(idRespon);
-		System.out.println("Retour de idRespon : " + idRespon);
+		Ressource ressource = (Ressource) session.getAttribute("ressource");		
+		if (ressource.getId() == null) {
+	        response.sendRedirect(request.getContextPath() + "/Home");
+		} else {
 		
-		demande.setIdRequest(0);
-		demande.setIdSource(ressource.getId());
-		demande.setIdManagerMaint(ressource.getUserId());
-		demande.setState("en attente");
-		demande.setDescription(request.getParameter("anomalie"));
-		demande.setIdUser(Integer.valueOf(request.getParameter("idUser")));
-		
-		DemandeDAO tableDemande = new DemandeDAO();
-		tableDemande.ajoutDemande(demande);
-		System.out.println(demande.toString());
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/accueil.jsp").forward(request, response);
+			request.setCharacterEncoding("UTF-8");
+			Demande demande = new Demande();
+			
+			RessourceDAO ressourceDao = new RessourceDAO();
+			System.out.println("idRessource = " + ressource.getId());
+			long idRespon = (long) ressourceDao.findRespon(ressource.getId());
+			System.out.println("Retour de idRespon : " + idRespon);
+			ressource.setUserId(idRespon);
+			System.out.println("Retour de idRespon : " + idRespon);
+			
+			demande.setIdRequest(0);
+			demande.setIdSource(ressource.getId());
+			demande.setIdManagerMaint(ressource.getUserId());
+			demande.setState("en attente");
+			demande.setDescription(request.getParameter("anomalie"));
+			demande.setIdUser(Integer.valueOf(request.getParameter("idUser")));
+			
+			DemandeDAO tableDemande = new DemandeDAO();
+			tableDemande.ajoutDemande(demande);
+			System.out.println(demande.toString());
+	        response.sendRedirect(request.getContextPath() + "/Profile");
+		}
 	}
 
 }
