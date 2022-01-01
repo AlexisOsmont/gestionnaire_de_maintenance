@@ -24,6 +24,9 @@ public class Profile extends HttpServlet {
 		UserDAO listUser = new UserDAO();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+		if (user == null) {
+	        response.sendRedirect(request.getContextPath() + "/Home");
+		}
 
 		request.setAttribute("demandes", listDemandes.recupDemandesId(user.getId()));
 		request.setAttribute("ressource", listRessource.recupRessourceRespId(user.getId()));

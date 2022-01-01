@@ -34,13 +34,13 @@
 				</div>
 			</form>
 			<%
-					if (request.getAttribute("infoCreation") != null) {
-						if(request.getAttribute("infoCreation").toString().startsWith("Creation")) { %>
-							<p style="color:red">Erreur pendant la création de la ressource.</p>
-				<% 	
-						}
+				if (request.getAttribute("infoRegistration") != null) {
+					if(request.getAttribute("infoRegistration").toString().startsWith("Username:")) { %>
+						<p style="color:red">Nom d'utilisateur existe.</p>
+			<% 	
 					}
-				%>
+				}
+			%>
 		</div>
 	</body>
 </html>

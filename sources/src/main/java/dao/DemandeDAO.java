@@ -201,7 +201,7 @@ public class DemandeDAO {
 		}
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "projetWeb", "bewprojet");
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "Alexis", "Alexis");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

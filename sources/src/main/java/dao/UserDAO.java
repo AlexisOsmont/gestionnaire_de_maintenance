@@ -70,6 +70,27 @@ public class UserDAO {
 		return null;
 	}
 	
+	public boolean userExist(String username) {
+		
+		loadDatabase();
+		System.out.println("Chargement de la database fait ressourcerespid");
+		try {
+			PreparedStatement ps = connexion.prepareStatement("SELECT * FROM Utilisateurs WHERE username=?");
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();			
+			//String query = "SELECT * FROM Ressources WHERE idManagerMaint=?";
+
+			// Récupération des données
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLException e) {
+		}		
+		return false;
+	}
+	
 	public List<User> recupRespon() {
 
 		List<User> listUser = new ArrayList<User>();

@@ -21,6 +21,13 @@
 				<input type="submit" value="Envoyez">
 			</span>
 		</form>
+		<%
+		if (request.getAttribute("infoLogin") != null) {
+		%>
+			<p style="color:red">Nom d'utilisateur ou mdp incorrect.</p>
+		<%		
+		}	
+		%>
 	</div>
 </body>
 </html>

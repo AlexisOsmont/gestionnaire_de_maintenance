@@ -19,23 +19,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Profile</title>
-	<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/printKanbans.css" />
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/menu.css" />
-	<script src="${pageContext.request.contextPath}/js/menu.js"></script>
-    <script src="${pageContext.request.contextPath}/js/textareaParser.js"></script>
-	<script>
-		function validateAction(text, id) {
-    		if (confirm(text)) {
-      	 	 document.getElementById(id).submit();
-    		}
-		}
-	</script>
-	<style>
-		select {
-			height : 25px;
-			width : 250px;
-		}
-	</style> -->
 </head>
 <body>
 	<%
@@ -51,7 +34,20 @@
 				if(!demandeBuf.getState().equals("valid")) {
 			%>
 			<form method="POST"> 
-				<label><%= demandeBuf.getDescription() %></label>
+				<label>
+				<%
+				List<Ressource> listRessource = (List<Ressource>) request.getAttribute("ressource");
+				%>
+				<%
+				for (Ressource ressource : listRessource) {
+				
+					if (ressource.getId() == demandeBuf.getIdSource()) {
+						%>
+						<%= ressource.getNom()%> : <%= ressource.getLocalisation()%> -> (<%= demandeBuf.getDescription()%>)
+						<%
+					}
+				}
+				%></label>
 				<button type="submit" name="validerDemande" value="<%=demandeBuf.getIdRequest()%>"> Valider </button>
    			</form> 
 			<br>

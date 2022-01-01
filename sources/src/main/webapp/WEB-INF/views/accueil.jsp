@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Accueil</title>
+<title>accueil</title>
 </head>
 <body>
 	<%
@@ -27,7 +27,9 @@
 		<form method="post" action="accueil">
 			<span>
 				<label for="anomalie">Décrivez l'anomalie : </label>
-				<input type="text" id="anomalie" placeholder="Rentrez vos constations" name="anomalie" required>
+				<input type="text" id="anomalie" placeholder="Rentrez vos constations" name="anomalie" required><br>
+				<label for="anomalie">Identifiez vous : (optionnel) </label>
+				<input type="test" id="idUser" placeholder="entrez votre numero d'identifiant" name="idUser" required>
 			</span>
 			<span>
 				<input type="submit" value="Envoyez">

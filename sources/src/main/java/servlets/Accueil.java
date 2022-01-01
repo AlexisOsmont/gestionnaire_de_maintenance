@@ -25,8 +25,7 @@ public class Accueil extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getParameter("id") == null) {
-	        this.getServletContext().getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-
+	        response.sendRedirect(request.getContextPath() + "/Home");
 		}
 		HttpSession session = request.getSession();
 		request.setCharacterEncoding("UTF-8");
@@ -60,11 +59,11 @@ public class Accueil extends HttpServlet {
 		System.out.println("Retour de idRespon : " + idRespon);
 		
 		demande.setIdRequest(0);
-		demande.setIdUser(000);
 		demande.setIdSource(ressource.getId());
 		demande.setIdManagerMaint(ressource.getUserId());
 		demande.setState("en attente");
 		demande.setDescription(request.getParameter("anomalie"));
+		demande.setIdUser(Integer.valueOf(request.getParameter("idUser")));
 		
 		DemandeDAO tableDemande = new DemandeDAO();
 		tableDemande.ajoutDemande(demande);

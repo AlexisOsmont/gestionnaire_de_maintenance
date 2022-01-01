@@ -40,8 +40,14 @@ public class CreationCompte extends HttpServlet {
 	// COMMANDES
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+	        response.sendRedirect(request.getContextPath() + "/Home");
+		} else {
+			request.setCharacterEncoding("UTF-8");
+        	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,11 +57,16 @@ public class CreationCompte extends HttpServlet {
 			String role = "responsable maintenance";
 
 			this.userDao = new UserDAO();
+			if (userDao.userExist(userName)) {	
+				request.setAttribute("infoRegistration", "Username: " + userName + " already exist.");
+				doGet(request, response);
+			} else {
 			User user = new User();
 			user.setPassword(passwd);
 			user.setUsername(userName);
 			user.setRole(role);
 			userDao.createUser(user);
 	        response.sendRedirect(request.getContextPath() + "/Profile");
+			}
 	}
 }
