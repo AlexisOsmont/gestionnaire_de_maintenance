@@ -101,7 +101,7 @@ public class Configuration extends HttpServlet {
 					//		password = password
 					bw.write("url = jdbc:mysql://" + adress + ":3306/" + scheme);
 					bw.newLine();
-					bw.write("driver = com.mysql.jdbc.Driver");
+					bw.write("driver = com.mysql.cj.jdbc.Driver");
 					bw.newLine();
 					bw.write("user = " + username);
 					bw.newLine();
