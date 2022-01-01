@@ -75,35 +75,32 @@ public class RessourceDAO {
 		}
 	}
 	
+	// Récupère l'identifiant du responsable de la ressource d'identifiant id.
 	public long findRespon(long id) throws DAOException {
 		java.sql.Statement statement = null; //représente requête SQL
 		ResultSet resultat = null;
 		
 		loadDatabase();
 		System.out.println("Chargement de la database fait ressourcerespid");
+		int idRechercher = -1;
 		try {
-		statement = connexion.createStatement();
-		
-		// Exécution de la requête
-		String query = "SELECT * FROM Ressources WHERE idManagerMaint=?";
-		PreparedStatement ps = connexion.prepareStatement(query);
-		ps.setLong(1, id);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int idRespon = rs.getInt("idManagerMaint");
-		
-		
-		// Récupération des données
-		
+			statement = connexion.createStatement();
+			
+			// Exécution de la requête
+			resultat = statement.executeQuery("SELECT * FROM Ressources WHERE idSource=" + id);
+			//String query = "SELECT * FROM Ressources WHERE idManagerMaint=?";
 
-		return (long)idRespon;
+			// Récupération des données
+	        while (resultat.next()) {
+				idRechercher = resultat.getInt("idManagerMaint");
+        }
 		} catch(SQLException e) {
 			
 		}
-		return 1;
+		return idRechercher;
 	}
 	
-	
+	// Récupère toutes les ressources du responsable d'identifiant id.
 	public List<Ressource> recupRessourceRespId(long id) {
 		List<Ressource> listRessource = new ArrayList<Ressource>();
 		java.sql.Statement statement = null; //représente requête SQL
@@ -155,6 +152,7 @@ public class RessourceDAO {
 		return listRessource;
 	}
 	
+	// Récupère la resource d'identifiant id
 	public Ressource recupRessourceId(long id) {
         java.sql.Statement statement = null; //représente requête SQL
         ResultSet resultat = null;
@@ -172,6 +170,8 @@ public class RessourceDAO {
             while (resultat.next()) {
                 int idSource = resultat.getInt("idSource");
                 int idManagerMaint = resultat.getInt("idManagerMaint");
+                System.out.print("recupRessourceId : idManagerMaint = ");
+                System.out.println(idManagerMaint);
                 String localisation = resultat.getString("localisation");
                 String description = resultat.getString("description");
                 String nom = resultat.getString("nom");
@@ -218,7 +218,7 @@ public class RessourceDAO {
 		}
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "Alexis", "Alexis");
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetWebDataBase", "projetWeb", "bewprojet");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
