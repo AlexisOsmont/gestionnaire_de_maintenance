@@ -64,6 +64,7 @@
 			%>
 				<form method="POST">  <label><%= ressourceBuf.getNom()%>:<%=ressourceBuf.getLocalisation() %>-> (<%=ressourceBuf.getDescription() %>)</label>
       				<button type="submit" name="suppRessource" value="<%=ressourceBuf.getId()%>"> Supprimer </button>  
+      				<button type="submit" name="generateURL" value="<%=ressourceBuf.getId()%>"> Générer l'URL </button>
     			</form> 
     			<br>
 			<%
@@ -71,7 +72,7 @@
 			
 			%>
 			<form method="POST">  
-	       		<input type="submit" name="CreationRessource" value="CreationRessource"/>  
+	       		<input type="submit" name="CreationRessource" value="Créer une ressource"/>  
 	     	</form> 
 		<%} else { %>
 			<h2>Liste des responsables de maintenance :</h2><br>

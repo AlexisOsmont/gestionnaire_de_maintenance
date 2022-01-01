@@ -49,6 +49,9 @@ public class Profile extends HttpServlet {
 		request.setAttribute("Users", listUser.recupRespon());
 		if (request.getParameter("CreationRessource") != null) {
 	        response.sendRedirect(request.getContextPath() + "/CreationRessource");
+		} else if (request.getParameter("generateURL") != null) {
+			request.setAttribute("ressourceId",  request.getParameter("generateURL"));
+			this.getServletContext().getRequestDispatcher("/WEB-INF/views/url.jsp").forward(request, response);
 		} else if (request.getParameter("CreationUser") != null) {
 	        response.sendRedirect(request.getContextPath() + "/CreationCompte");
 		} else if (request.getParameter("suppRessource") != null) {
