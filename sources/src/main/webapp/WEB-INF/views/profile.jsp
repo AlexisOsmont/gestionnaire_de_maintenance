@@ -74,7 +74,7 @@
 			
 			%>
 			<form method="POST">  
-	       		<button type="submit" name="CreationRessource" value="Créer une ressource"/> Créer une ressrouce </button>
+	       		<button type="submit" name="CreationRessource" value="Créer une ressource"/> Créer une ressource </button>
 	     	</form> 
 		<%} else { %>
 			<div class="segment">

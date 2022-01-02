@@ -209,7 +209,7 @@ public class DemandeDAO {
             statement = connexion.createStatement();
 
             // Exécution de la requête
-            statement.executeQuery("DELETE FROM Demande WHERE idSource="+id);
+            statement.executeUpdate("DELETE FROM Demande WHERE idSource="+id);
 
         } catch (SQLException e) {
         } finally {
