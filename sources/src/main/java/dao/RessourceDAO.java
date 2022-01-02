@@ -76,6 +76,8 @@ public class RessourceDAO {
 			verifyConfiguration();
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
 			Connection con = DriverManager.getConnection(url, userProp, pwdProp);
+			DemandeDAO demande = new DemandeDAO();
+			demande.suppDemandesIdSource(id);
 			PreparedStatement pst = con.prepareStatement(SQL_DEL);
 			pst.setLong(1,id);
 			pst.executeUpdate();

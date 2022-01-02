@@ -199,6 +199,29 @@ public class DemandeDAO {
         return listDemandes;
     }
 	
+    // supprime toutes les demandes d'idSource id.
+    public void suppDemandesIdSource(long id) {
+        java.sql.Statement statement = null; //représente requête SQL
+
+        loadDatabase();
+
+        try {
+            statement = connexion.createStatement();
+
+            // Exécution de la requête
+            statement.executeQuery("DELETE FROM Demande WHERE idSource="+id);
+
+        } catch (SQLException e) {
+        } finally {
+            // Fermeture de la connexion à la base de données
+            try {
+                if (statement != null) statement.close();
+                if (connexion != null) connexion.close();
+            } catch (SQLException ignore) {
+            }
+        }
+    }
+    
 	// UTILS
 	
 	// charge le driver JDBC et se connecte à la database "projetWebDataBase"
