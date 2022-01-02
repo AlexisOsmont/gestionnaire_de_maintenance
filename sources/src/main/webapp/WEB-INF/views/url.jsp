@@ -4,11 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/url.css" />
 <title>url</title>
 </head>
 <body>
-<img id='barcode' src='https://api.qrserver.com/v1/create-qr-code/?data="http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>"&amp;size=75x75' width='75' height='75' /> 
-<br>
-<a href="http://192.168.76.76:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>">gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %></a>
+<img id='barcode' src='https://api.qrserver.com/v1/create-qr-code/?data="http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>"&amp;size=75x75' width='75' height='75' />
+<h1> Flashez-moi !</h1>
+<p>Pour signaler un problème avec ce matériel.</p>
+<a href="http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %>">http://localhost:8080/gestionnaire_maintenance/accueil?id=<%= request.getAttribute("ressourceId") %></a>
 </body>
 </html>
