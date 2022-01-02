@@ -57,16 +57,18 @@ public class Profile extends HttpServlet {
 		} else if (request.getParameter("suppRessource") != null) {
 			RessourceDAO dao = new RessourceDAO();
 			dao.suppRessource( (long) Integer.parseInt(request.getParameter("suppRessource")));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+			this.doGet(request, response);
 		}  else if (request.getParameter("suppUser") != null) {
 			UserDAO dao = new UserDAO();
 			dao.suppUser( (long) Integer.parseInt(request.getParameter("suppUser")));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+			this.doGet(request, response);
 		} else if (request.getParameter("validerDemande") != null) {
 			DemandeDAO dao = new DemandeDAO();
 			dao.setDemandeValide( (long) Integer.parseInt(request.getParameter("validerDemande")));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
-		} else {
+			this.doGet(request, response);
+		} else if (request.getParameter("redirectHome") != null) {
+		        response.sendRedirect(request.getContextPath() + "/Home");
+		}else {
 			this.getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
 		}
 	}

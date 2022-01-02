@@ -64,7 +64,7 @@ public class Accueil extends HttpServlet {
 			demande.setIdManagerMaint(ressource.getUserId());
 			demande.setState("en attente");
 			demande.setDescription(request.getParameter("anomalie"));
-			demande.setIdUser(Integer.valueOf(request.getParameter("idUser")));
+			demande.setIdUser(Integer.valueOf(request.getParameter("idUser").equals("") ? 0 : Integer.valueOf(request.getParameter("idUser"))));
 			
 			DemandeDAO tableDemande = new DemandeDAO();
 			tableDemande.ajoutDemande(demande);

@@ -93,5 +93,9 @@
        			<input type="submit" name="CreationUser" value="CreationUser"/>  
      		</form> 
 		<%} %>
+		<br>
+		<form method="POST"> 
+			<button href="Home" type="submit" name="redirectHome" value="Home"> Back Home </button>
+   		</form>
 </body>
 </html>
