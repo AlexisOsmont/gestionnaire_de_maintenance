@@ -40,7 +40,6 @@ public class DemandeDAO {
 			
 			// Récupération des données
 			while (resultat.next()) {
-				System.out.println(resultat);
 				int idRequest = resultat.getInt("idRequest");
 				int idUser = resultat.getInt("idUser");
 				int idSource = resultat.getInt("idSource");
@@ -113,14 +112,12 @@ public class DemandeDAO {
 		ResultSet resultat = null;
 		
 		loadDatabase();
-		System.out.println("Chargement de la database fait");
 		
 		try {			
 			statement = connexion.createStatement();
 			
 			// Exécution de la requête
 			resultat = statement.executeQuery("SELECT * FROM Demande WHERE idManagerMaint="+id);
-			System.out.println("Exécution de la requete fait");
 			
 			// Récupération des données
 			while (resultat.next()) {
@@ -222,7 +219,6 @@ public class DemandeDAO {
 	
 	private int maxId() {
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		try {
 			PreparedStatement ps = connexion.prepareStatement("SELECT max(idRequest) FROM Demande");
 			ResultSet rs = ps.executeQuery();			

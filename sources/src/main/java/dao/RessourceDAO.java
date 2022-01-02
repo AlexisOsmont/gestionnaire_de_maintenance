@@ -61,7 +61,6 @@ public class RessourceDAO {
 			PreparedStatement pst = con.prepareStatement(SQL_INSERT);
 			pst.setLong(1,maxId()+1);
 			pst.setLong(2,ressource.getUserId());
-			System.out.println(ressource.getUserId());
 			pst.setString(3,ressource.getLocalisation());
 			pst.setString(4,ressource.getDescription());
 			pst.setString(5,ressource.getNom());
@@ -92,7 +91,6 @@ public class RessourceDAO {
 		ResultSet resultat = null;
 		
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		int idRechercher = -1;
 		try {
 			statement = connexion.createStatement();
@@ -118,18 +116,15 @@ public class RessourceDAO {
 		ResultSet resultat = null;
 		
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		
 		try {			
 			statement = connexion.createStatement();
 			
 			// Exécution de la requête
 			resultat = statement.executeQuery("SELECT * FROM Ressources WHERE idManagerMaint="+id);
-			System.out.println("Exécution de la requete fait");
 			
 			// Récupération des données
 			while (resultat.next()) {
-				System.out.println(resultat);
 				int idSource = resultat.getInt("idSource");
 				int idManagerMaint = resultat.getInt("idManagerMaint");
 				String localisation = resultat.getString("localisation");
@@ -142,13 +137,10 @@ public class RessourceDAO {
 				ressource.setLocalisation(localisation);
 				ressource.setDescription(description);
 				ressource.setNom(nom);
-				System.out.println("Exécution :"+ressource.getNom());
 
 				
-				System.out.println("Création de l'objet fait");
 				
 				listRessource.add(ressource);
-				System.out.println("Ajout de l'objet à la liste d'objet fait");
 			}
 		} catch (SQLException e) {
 		} finally {
@@ -181,8 +173,6 @@ public class RessourceDAO {
             while (resultat.next()) {
                 int idSource = resultat.getInt("idSource");
                 int idManagerMaint = resultat.getInt("idManagerMaint");
-                System.out.print("recupRessourceId : idManagerMaint = ");
-                System.out.println(idManagerMaint);
                 String localisation = resultat.getString("localisation");
                 String description = resultat.getString("description");
                 String nom = resultat.getString("nom");
@@ -238,7 +228,6 @@ public class RessourceDAO {
 	
 	private int maxId() {
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		try {
 			PreparedStatement ps = connexion.prepareStatement("SELECT max(idSource) FROM Ressources");
 			ResultSet rs = ps.executeQuery();			

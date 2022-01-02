@@ -52,7 +52,6 @@ public class CreationCompte extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			request.setCharacterEncoding("UTF-8");
-			System.out.println("je suis dans le servlets");
 			String passwd = request.getParameter("password");
 			String userName = request.getParameter("userName");
 			String role = "responsable maintenance";

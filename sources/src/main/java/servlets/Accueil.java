@@ -37,7 +37,6 @@ public class Accueil extends HttpServlet {
 		RessourceDAO ressourceDB = new RessourceDAO();
 		Ressource ressource = new Ressource();
 		ressource = ressourceDB.recupRessourceId(Integer.valueOf(idRessource).intValue());
-		System.out.println("Accueil.java l.41 : idRessource " + ressource.getId());;
 		session.setAttribute("ressource", ressource);
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/accueil.jsp").forward(request, response);
 	}
@@ -53,11 +52,8 @@ public class Accueil extends HttpServlet {
 			Demande demande = new Demande();
 			
 			RessourceDAO ressourceDao = new RessourceDAO();
-			System.out.println("idRessource = " + ressource.getId());
 			long idRespon = (long) ressourceDao.findRespon(ressource.getId());
-			System.out.println("Retour de idRespon : " + idRespon);
 			ressource.setUserId(idRespon);
-			System.out.println("Retour de idRespon : " + idRespon);
 			
 			demande.setIdRequest(0);
 			demande.setIdSource(ressource.getId());
@@ -68,7 +64,6 @@ public class Accueil extends HttpServlet {
 			
 			DemandeDAO tableDemande = new DemandeDAO();
 			tableDemande.ajoutDemande(demande);
-			System.out.println(demande.toString());
 	        response.sendRedirect(request.getContextPath() + "/Profile");
 		}
 	}

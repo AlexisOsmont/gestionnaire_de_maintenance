@@ -84,7 +84,6 @@ public class UserDAO {
 	public boolean userExist(String username) {
 		
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		try {
 			PreparedStatement ps = connexion.prepareStatement("SELECT * FROM Utilisateurs WHERE username=?");
 			ps.setString(1, username);
@@ -222,7 +221,6 @@ public class UserDAO {
 	
 	private int maxId() {
 		loadDatabase();
-		System.out.println("Chargement de la database fait ressourcerespid");
 		try {
 			PreparedStatement ps = connexion.prepareStatement("SELECT max(idUser) FROM Utilisateurs");
 			ResultSet rs = ps.executeQuery();			
