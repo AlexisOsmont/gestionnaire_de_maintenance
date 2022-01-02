@@ -4,21 +4,27 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css" />
 <title>Login</title>
 </head>
-<body>
+<body>  
+	<div class="segment">
+    	<h1>Connectez Vous</h1>
+ 	</div>
 	<div id="formulaire">
 		<form method="post">
 			<span>
 				<label for="login">Login :</label>
 				<input type="text" id="login" name="login" required>
 			</span>
+			<br><br>
 			<span>	
 				<label for="password">Password :</label>
 				<input type="password" id="password" name="password" required>
 			</span>
-			<span>
-				<input type="submit" value="Envoyez">
+			<br><br>
+			<span>			
+				<input type="submit" value="Connexion">
 			</span>
 		</form>
 		<%

@@ -13,36 +13,36 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css" />
 		<title>Création d'une ressource</title>
 	</head>
 	<body>
-		<h1>Créer une ressource</h1>
-		
-		<!--
-			Description du formulaire de la création de la ressource 
-		 -->
-		 <%
+		<%
 		User user = session.getAttribute("user") != null ? (User) session.getAttribute("user") : null;
 		%>
-		<ul class="ulMenu">
-				<li id="page"><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></li>
-		</ul>
+		<h3 id="page"><%=user.getUsername()%>, vous êtes connecté(e) en tant que <%=user.getRole()%></h3>
+		<div class="segment">
+   			 <h1>Création de ressource</h1>
+  		</div> 
 		<div id="container">
 			<form method="post">
 				<div>
 					<label for="name">Nom de la ressource :</label>
-					<input type="text" id="name" placeholder="Nom de la ressource" name="name" required>
+					<input type="text" id="name" placeholder="" name="name" required>
 				</div>
+				<br><br>
 				<div>
 					<label for="name">Description :</label>
-					<input type="text" id="description" placeholder="Description" name="description" required>
+					<input type="text" id="description" placeholder="Ne s'allume plus" name="description" required>
 				</div>
+				<br><br>
 				<div>
 					<label for="public">localisation :</label>
-					<input type="text" id="localisation" placeholder="Localisation" name="localisation" required>
+					<input type="text" id="localisation" placeholder="U2.2.52" name="localisation" required>
 				</div>
+				<br><br>
 				<div>
-					<input type="submit" id="submit-form" value="Créer">
+					<button type="submit" id="submit-form" value="Créer">Créer la ressource</button>
 				</div>
 			</form>
 			<%

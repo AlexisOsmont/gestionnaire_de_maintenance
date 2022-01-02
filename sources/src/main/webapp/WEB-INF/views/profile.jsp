@@ -18,13 +18,15 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css" />
 	<title>Profile</title>
 </head>
 <body>
 	<%
 		User user = session.getAttribute("user") != null ? (User) session.getAttribute("user") : null;
 	%>
-	<h3><%=user.getUsername()%>, Vous êtes connecté(e) en tant que <%=user.getRole()%></h3>
+	<h3><%=user.getUsername()%>, vous êtes connecté(e) en tant que <%=user.getRole()%></h3>
+	
 	<%  if (!user.getRole().equals("admin")) {%>
    			<h2>Liste des Demandes :</h2><br>
 	
@@ -72,10 +74,13 @@
 			
 			%>
 			<form method="POST">  
-	       		<input type="submit" name="CreationRessource" value="Créer une ressource"/>  
+	       		<button type="submit" name="CreationRessource" value="Créer une ressource"/> Créer une ressrouce </button>
 	     	</form> 
 		<%} else { %>
-			<h2>Liste des responsables de maintenance :</h2><br>
+			<div class="segment">
+    			<h1>Liste des responsables</h1>
+    			<h1> de maintenance</h1>
+ 			</div>
 	
 			<%
 			List<User> listUser = (List<User>) request.getAttribute("Users");
@@ -90,12 +95,12 @@
 			} 
 			%>
 			 <form method="POST">  
-       			<input type="submit" name="CreationUser" value="CreationUser"/>  
+       			<button type="submit" name="CreationUser" value="CreationUser"/> Créer un utilisateur </button>
      		</form> 
 		<%} %>
 		<br>
 		<form method="POST"> 
-			<button href="Home" type="submit" name="redirectHome" value="Home"> Back Home </button>
-   		</form>
+		<button href="Home" type="submit" name="redirectHome" value="Home"> Back Home </button>
+   	</form>
 </body>
 </html>

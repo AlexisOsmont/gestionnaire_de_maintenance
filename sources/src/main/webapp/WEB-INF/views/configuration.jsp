@@ -1,15 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- 
-	Page permettant d'initialiser la configuration de la connexion à la base de données
-	Contient un formulaire, avec 4 champs
-	Aucun affichage à l'aide de css n'est fait car il ne s'agit que d'une page de configuration qui sera 
-		utilisé qu'une seule fois après le déploiement
- -->
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css" />
 		<title>Configuration de la Database</title>
 	</head>
 	

@@ -11,6 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css" />
 <title>accueil</title>
 </head>
 <body>
@@ -18,20 +19,23 @@
 	List<Demande> listDemandes = (List<Demande>) request.getAttribute("demandes");
 	Ressource ressource = (Ressource) session.getAttribute("ressource");
 	%>
-	<h1>
-		<%= ressource.getNom()%> : <%= ressource.getLocalisation()%>
-	</h1>
-	<p>Description de la ressource :<br> <br> <%= ressource.getDescription() %></p>
+	
+	<div class="segment">
+    <h1><%= ressource.getNom()%> : <%= ressource.getLocalisation()%></h1>
+    <br>
+    <br>
+    <h1><%= ressource.getDescription() %></h1>
+  	</div>
 	
 	<div id="formulaire">
 		<form method="post" action="accueil">
 			<span>
 				<label for="anomalie">Décrivez l'anomalie : </label>
-				<input type="text" id="anomalie" placeholder="Rentrez vos constations" name="anomalie" required><br>
-				<label for="anomalie">Identifiez vous : (optionnel) </label>
-				<input type="test" id="idUser" placeholder="entrez votre numero d'identifiant" name="idUser">
+				<input type="text" id="anomalie" placeholder="Rentrez vos constations" name="anomalie" required><br><br>
+				<label for="anomalie">Identifiez vous  (optionnel) : </label>
+				<input type="test" id="idUser" placeholder="Entrez votre numero d'identifiant" name="idUser"><br><br>
 			</span>
-			<span>
+			<span><br>
 				<input type="submit" value="Envoyez">
 			</span>
 		</form>
